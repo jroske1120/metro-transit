@@ -11,7 +11,7 @@ const Footer: React.FC = () => (
       </strong>
     </p>
     <p>Minneapolis/St. Paul, MN</p>
-    <p>© 2021 Metro Transit</p>
+    <p>© 2021 JJ Roske - Metro Transit</p>
   </Wrapper>
 );
 

@@ -1,4 +1,4 @@
-import { render, within, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import App from "./App";
 import MainPage from "./Components/MainPage/MainPage";

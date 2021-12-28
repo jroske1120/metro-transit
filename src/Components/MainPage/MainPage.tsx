@@ -9,7 +9,6 @@ import Stops from "../Stops/Stops";
 import "./MainPage.css";
 
 const MainPage: React.FC = () => {
-
   const [routes, setRoutes] = useState([] as MetroRoute[]);
   const [directions, setDirections] = useState([] as RouteDirection[]);
   const [stops, setStops] = useState([] as StopsList[]);
@@ -20,9 +19,11 @@ const MainPage: React.FC = () => {
 
   const [loading, setLoading]: [boolean, (loading: boolean) => void] =
     React.useState<boolean>(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError]: [string, (error: string) => void] = useState("");
 
   const cancelToken = axios.CancelToken; //create cancel token
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cancelTokenSource, setCancelTokenSource]: [
     CancelTokenSource,
     (cancelTokenSource: CancelTokenSource) => void
@@ -32,6 +33,34 @@ const MainPage: React.FC = () => {
     if (cancelTokenSource) {
       cancelTokenSource.cancel("User cancelled operation");
     }
+  };
+
+  const selectRoute = (routes: HTMLSelectElement) => {
+    setSelectedRoute({
+      route_id: routes.value,
+      route_label: routes.options[routes.selectedIndex].text,
+    });
+    setSelectedDirection(selectedDirection ? null : selectedDirection);
+  };
+
+  const selectDirection = (directions: HTMLSelectElement) => {
+    setSelectedDirection({
+      direction_id: Number(directions.value),
+      direction_name: directions.options[directions.selectedIndex].text,
+    });
+  };
+
+  const catchErr = (err: any) => {
+    console.log(err);
+    let error = axios.isCancel(err)
+      ? "Request Cancelled"
+      : err.code === "ECONNABORTED"
+      ? "A timeout has occurred"
+      : err.response.status === 404
+      ? "Resource Not Found"
+      : "An unexpected error has occurred";
+    setError(error);
+    setLoading(false);
   };
 
   //Gets routes on load
@@ -49,18 +78,9 @@ const MainPage: React.FC = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
-        let error = axios.isCancel(err)
-          ? "Request Cancelled"
-          : err.code === "ECONNABORTED"
-          ? "A timeout has occurred"
-          : err.response.status === 404
-          ? "Resource Not Found"
-          : "An unexpected error has occurred";
-        setError(error);
-        setLoading(false);
+        catchErr(err);
       });
-  }, []);
+  }, [cancelTokenSource.token]);
 
   //Gets Directions
   useEffect(() => {
@@ -69,19 +89,14 @@ const MainPage: React.FC = () => {
       setStops([]);
       axios
         .get<RouteDirection[]>(
-          `https://svc.metrotransit.org/nextripv2/directions/${selectedRoute?.route_id}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            timeout: 10000,
-          }
+          `https://svc.metrotransit.org/nextripv2/directions/${selectedRoute?.route_id}`
         )
         .then((response) => {
-          // history.push(selectedRoute[1])
           setDirections(response.data);
         })
-        .catch((err) => `${err.message} CANNOT GET DIRECTIONS`);
+        .catch((err) => {
+          catchErr(err);
+        });
     }
   }, [selectedRoute]);
 
@@ -91,37 +106,17 @@ const MainPage: React.FC = () => {
       const path = `${selectedRoute?.route_id}/${selectedDirection?.direction_id}`;
       axios
         .get<StopsList[]>(
-          //make whats in parenthesis variable outside
-          `https://svc.metrotransit.org/nextripv2/stops/${path}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            timeout: 10000,
-          }
+          `https://svc.metrotransit.org/nextripv2/stops/${path}`
         )
         .then((response) => {
           // navigate(`/${path}`);
           setStops(response.data);
-      })
-        .catch((err) => `${err.message} CANNOT GET DIRECTIONS`);
+        })
+        .catch((err) => {
+          catchErr(err);
+        });
     }
-  }, [selectedDirection]);
-
-  const selectRoute = (routes: HTMLSelectElement) => {
-    setSelectedRoute({
-      route_id: routes.value,
-      route_label: routes.options[routes.selectedIndex].text,
-    });
-    setSelectedDirection(selectedDirection ? null : selectedDirection);
-  };
-
-  const selectDirection = (directions: HTMLSelectElement) => {
-    setSelectedDirection({
-      direction_id: Number(directions.value),
-      direction_name: directions.options[directions.selectedIndex].text,
-    });
-  };
+  }, [selectedDirection, selectedRoute?.route_id]);
 
   return (
     <div className="main-page">
@@ -163,8 +158,8 @@ const MainPage: React.FC = () => {
                   data-testid={`direction-${direction.direction_id}`}
                   key={direction.direction_id}
                   value={direction.direction_id}
-                //   onClick={() => navigate(`/${selectedRoute?.route_id}/${selectedDirection?.direction_id}`)
-                // }
+                  //   onClick={() => navigate(`/${path}`)
+                  // }
                 >
                   {direction.direction_name}
                 </option>
@@ -173,7 +168,6 @@ const MainPage: React.FC = () => {
           )}
         </div>
         {selectedDirection && (
-          
           <Stops stops={stops} selectedDirection={selectedDirection} />
         )}
       </div>
