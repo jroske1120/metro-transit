@@ -1,6 +1,11 @@
 import axios, { CancelTokenSource } from "axios";
 import React, { useEffect, useState } from "react";
-import { MetroRoute, RouteDirection, StopsList } from "../../Interfaces/Interfaces";
+import {
+  MetroRoute,
+  RouteDirection,
+  StopsList
+} from "../../Interfaces/Interfaces";
+import Stops from "../Stops/Stops";
 import "./MainPage.css";
 
 const MainPage: React.FC = () => {
@@ -11,7 +16,7 @@ const MainPage: React.FC = () => {
   const [selectedRoute, setSelectedRoute] = useState<MetroRoute | null>(null);
   const [selectedDirection, setSelectedDirection] =
     useState<RouteDirection | null>(null);
-    
+
   const [loading, setLoading]: [boolean, (loading: boolean) => void] =
     React.useState<boolean>(true);
   const [error, setError]: [string, (error: string) => void] = useState("");
@@ -86,12 +91,33 @@ const MainPage: React.FC = () => {
           }
         )
         .then((response) => {
-          // history.push(selectedRoute[1])
           setDirections(response.data);
         })
         .catch((err) => `${err.message} CANNOT GET DIRECTIONS`);
     }
   }, [selectedRoute]);
+
+  //Gets stops
+  useEffect(() => {
+    if (selectedDirection) {
+      const path = `${selectedRoute?.route_id}/${selectedDirection?.direction_id}`;
+      axios
+        .get<StopsList[]>(
+          //make whats in parenthesis variable outside
+          `https://svc.metrotransit.org/nextripv2/stops/${path}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            timeout: 10000,
+          }
+        )
+        .then((response) => {
+          setStops(response.data);
+        })
+        .catch((err) => `${err.message} CANNOT GET STOPS`);
+    }
+  }, [selectedDirection]);
 
   return (
     <div className="main-page">
@@ -139,6 +165,9 @@ const MainPage: React.FC = () => {
             </select>
           )}
         </div>
+        {selectedDirection && (
+          <Stops stops={stops} selectedDirection={selectedDirection} />
+        )}
       </div>
     </div>
   );
