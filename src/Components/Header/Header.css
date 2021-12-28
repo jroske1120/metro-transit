@@ -1,0 +1,44 @@
+.logo {
+  background: url("../../Images/MetroTransitLogo.svg") no-repeat center;
+  height: 30px;
+  width: 200px;
+  background-size: contain;
+  margin: 20px;
+}
+.banner {
+  background: url("../../Images/nextrip.jpg") no-repeat center;
+  background-size: cover;
+  background-position: 90%;
+  background-repeat: no-repeat;
+  height: 10rem;
+  position: relative;
+}
+.banner h1 {
+  position: absolute;
+  background-color: #fff;
+  color: #8a8b8a;
+  opacity: 0.9;
+  margin-bottom: 0;
+  padding: 1rem;
+  width: auto;
+  font-size: 2rem !important;
+  left: 20px;
+  bottom: 20px;
+}
+
+@media screen and (min-width: 992px) {
+  .banner {
+    height: 275px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .banner {
+    height: 320px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .banner {
+    height: 240px;
+  }
+}

@@ -28,8 +28,8 @@ const Stops: React.FC<Props> = ({ stops, selectedDirection }) => {
         </div>
       ) : (
         <div>
-          We are unable to get the desired stops. Please try changing the option
-          for the route and direction.
+          We are unable to get the desired direction for your select, Kindly try
+          changing the option for the route, direction and stop
         </div>
       )}
     </div>

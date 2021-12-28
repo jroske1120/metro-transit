@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import {
   MetroRoute,
   RouteDirection,
-  StopsList
+  StopsList,
 } from "../../Interfaces/Interfaces";
 import Stops from "../Stops/Stops";
 import "./MainPage.css";
 
 const MainPage: React.FC = () => {
+
   const [routes, setRoutes] = useState([] as MetroRoute[]);
   const [directions, setDirections] = useState([] as RouteDirection[]);
   const [stops, setStops] = useState([] as StopsList[]);
@@ -31,20 +32,6 @@ const MainPage: React.FC = () => {
     if (cancelTokenSource) {
       cancelTokenSource.cancel("User cancelled operation");
     }
-  };
-
-  const selectRoute = (routes: HTMLSelectElement) => {
-    setSelectedRoute({
-      route_id: routes.value,
-      route_label: routes.options[routes.selectedIndex].text,
-    });
-  };
-
-  const selectDirection = (directions: HTMLSelectElement) => {
-    setSelectedDirection({
-      direction_id: Number(directions.value),
-      direction_name: directions.options[directions.selectedIndex].text,
-    });
   };
 
   //Gets routes on load
@@ -91,6 +78,7 @@ const MainPage: React.FC = () => {
           }
         )
         .then((response) => {
+          // history.push(selectedRoute[1])
           setDirections(response.data);
         })
         .catch((err) => `${err.message} CANNOT GET DIRECTIONS`);
@@ -113,11 +101,27 @@ const MainPage: React.FC = () => {
           }
         )
         .then((response) => {
+          // navigate(`/${path}`);
           setStops(response.data);
-        })
-        .catch((err) => `${err.message} CANNOT GET STOPS`);
+      })
+        .catch((err) => `${err.message} CANNOT GET DIRECTIONS`);
     }
   }, [selectedDirection]);
+
+  const selectRoute = (routes: HTMLSelectElement) => {
+    setSelectedRoute({
+      route_id: routes.value,
+      route_label: routes.options[routes.selectedIndex].text,
+    });
+    setSelectedDirection(selectedDirection ? null : selectedDirection);
+  };
+
+  const selectDirection = (directions: HTMLSelectElement) => {
+    setSelectedDirection({
+      direction_id: Number(directions.value),
+      direction_name: directions.options[directions.selectedIndex].text,
+    });
+  };
 
   return (
     <div className="main-page">
@@ -143,6 +147,7 @@ const MainPage: React.FC = () => {
               </option>
             ))}
           </select>
+
           {!!directions.length && (
             <select
               data-testid="direction-select"
@@ -158,6 +163,8 @@ const MainPage: React.FC = () => {
                   data-testid={`direction-${direction.direction_id}`}
                   key={direction.direction_id}
                   value={direction.direction_id}
+                //   onClick={() => navigate(`/${selectedRoute?.route_id}/${selectedDirection?.direction_id}`)
+                // }
                 >
                   {direction.direction_name}
                 </option>
@@ -166,6 +173,7 @@ const MainPage: React.FC = () => {
           )}
         </div>
         {selectedDirection && (
+          
           <Stops stops={stops} selectedDirection={selectedDirection} />
         )}
       </div>
