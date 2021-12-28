@@ -1,13 +1,17 @@
 import axios, { CancelTokenSource } from "axios";
 import React, { useEffect, useState } from "react";
-import { MetroRoute } from "../../Interfaces/Interfaces";
+import { MetroRoute, RouteDirection, StopsList } from "../../Interfaces/Interfaces";
 import "./MainPage.css";
 
 const MainPage: React.FC = () => {
   const [routes, setRoutes] = useState([] as MetroRoute[]);
+  const [directions, setDirections] = useState([] as RouteDirection[]);
+  const [stops, setStops] = useState([] as StopsList[]);
 
   const [selectedRoute, setSelectedRoute] = useState<MetroRoute | null>(null);
-
+  const [selectedDirection, setSelectedDirection] =
+    useState<RouteDirection | null>(null);
+    
   const [loading, setLoading]: [boolean, (loading: boolean) => void] =
     React.useState<boolean>(true);
   const [error, setError]: [string, (error: string) => void] = useState("");
@@ -28,6 +32,13 @@ const MainPage: React.FC = () => {
     setSelectedRoute({
       route_id: routes.value,
       route_label: routes.options[routes.selectedIndex].text,
+    });
+  };
+
+  const selectDirection = (directions: HTMLSelectElement) => {
+    setSelectedDirection({
+      direction_id: Number(directions.value),
+      direction_name: directions.options[directions.selectedIndex].text,
     });
   };
 
@@ -59,6 +70,29 @@ const MainPage: React.FC = () => {
       });
   }, []);
 
+  //Gets Directions
+  useEffect(() => {
+    if (selectedRoute) {
+      setDirections([]);
+      setStops([]);
+      axios
+        .get<RouteDirection[]>(
+          `https://svc.metrotransit.org/nextripv2/directions/${selectedRoute?.route_id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            timeout: 10000,
+          }
+        )
+        .then((response) => {
+          // history.push(selectedRoute[1])
+          setDirections(response.data);
+        })
+        .catch((err) => `${err.message} CANNOT GET DIRECTIONS`);
+    }
+  }, [selectedRoute]);
+
   return (
     <div className="main-page">
       <div>
@@ -83,6 +117,27 @@ const MainPage: React.FC = () => {
               </option>
             ))}
           </select>
+          {!!directions.length && (
+            <select
+              data-testid="direction-select"
+              defaultValue={""}
+              className="select-box"
+              onChange={(e) => selectDirection(e.target)}
+            >
+              <option value={""} disabled>
+                Select a Direction
+              </option>
+              {directions.map((direction) => (
+                <option
+                  data-testid={`direction-${direction.direction_id}`}
+                  key={direction.direction_id}
+                  value={direction.direction_id}
+                >
+                  {direction.direction_name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
       </div>
     </div>
