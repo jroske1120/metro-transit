@@ -1,46 +1,36 @@
-# Getting Started with Create React App
+# JJ Roske MetroTransit App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project allows a user to select a route and direction from the MetroTransit system, which will then display a list of possible stops to chose from.
 
-## Available Scripts
+## Steps to build and run
 
-In the project directory, you can run:
+Navigate to the terminal inside the project (from outside or inside code editor)
+
+### `npm install`
+
+This will install the packages and dependencies necessary to run and test this app.
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Runs the app in the development mode, and opens localhost:3000 in your browser.
+The steps to build and run your application.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Steps to to execute provided tests.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the jest/react-testing-library unit tests for the project. You may also be prompted for further steps (i.e. press 'a' to run all tests or 'f' to run only those that failed). These tests can be found in the App.test.tsx file.
 
-### `npm run build`
+### `npm run cy`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Runs the cypress integration tests for the project. These aren't entirely necessarily comprehensive of all the features, but provide decent expected behavior. These tests can be found in the route-direction-stops.spec.js file within the cypress folder.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## A list of assumptions you made during development.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Scalability - This is a very small app with limited features. If a part of a larger app I would likely refactor dropdowns and api calls into separate files reserved for components and services, respectively.
 
-### `npm run eject`
+- Data availability - The app is only as useful as the data, and since we don't control the data we need proper error handling. The error handling for a larger app should be better than this, but we're assuming this data is available and relatively easy to retrieve based on its small size.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Design - I mostly stuck with NexTrip's default designs, though they're not the greatest from an design or accesibility standpoint.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- There are a few other smaller assumptions, but most of them are related to me trying out new technology combinations in this app (first time combining React and Typescript, first time using the Jest/React-Testing-Library tests, first time using styled components, etc.)
