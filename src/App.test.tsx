@@ -5,14 +5,10 @@ import { render, screen } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { Router } from "react-router-dom";
+import stops from "./../cypress/fixtures/stops.json";
 import App from "./App";
 import MainPage from "./Components/MainPage/MainPage";
 import Stops from "./Components/Stops/Stops";
-
-const stops = [
-  { place_code: "UNDP", description: "Union Depot" },
-  { place_code: "CNST", description: "Central Station" },
-];
 
 const selectedDirection = { direction_id: 0, direction_name: "Eastbound" };
 
@@ -36,5 +32,5 @@ test(`has rendered a the items passed correctly`, () => {
     <Stops stops={stops} selectedDirection={selectedDirection} />
   );
   let listItems = getByRole("list");
-  expect(listItems.children.length).toEqual(2);
+  expect(listItems.children.length).toEqual(20);
 });

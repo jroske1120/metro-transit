@@ -4,6 +4,8 @@
 }
 
 .select-box {
+  animation-name: FadeIn;
+  animation-duration: 1s;
   display: inline-block;
   width: 100%;
   height: calc(1.5em + 0.75rem + 2px);
@@ -13,7 +15,8 @@
   line-height: 1.5;
   color: #626462;
   vertical-align: middle;
-  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px;
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e")
+    no-repeat right 0.75rem center/8px 10px;
   background-color: #fff;
   border: 1px solid #e3e3e0;
   border-radius: 0;
@@ -21,10 +24,20 @@
   -moz-appearance: none;
   appearance: none;
   margin: 10px 0;
+  border-radius: 5px;
+}
+
+@keyframes FadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @media screen and (max-width: 768px) {
-  .main-page{
+  .main-page {
     font-size: 23px;
     margin-bottom: 20px;
   }
@@ -33,4 +46,5 @@
   }
   .select-box {
     font-size: 18px;
-  }}
+  }
+}

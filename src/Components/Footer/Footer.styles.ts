@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
+// Mostly just wanted to play around with styled components
 export const Wrapper = styled.div`
-background: #f5f5f4;
-font-size: 15px;
-text-align: center;
-color: #626462;
-padding: 20px;
-box-sizing: border-box;
-margin-top: 40px;
+  background: #f5f5f4;
+  font-size: 15px;
+  text-align: center;
+  color: #626462;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-top: 40px;
 `;
