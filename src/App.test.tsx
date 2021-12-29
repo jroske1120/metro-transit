@@ -1,3 +1,5 @@
+/* eslint-disable testing-library/no-node-access */
+/* eslint-disable testing-library/prefer-screen-queries */
 import { render } from "@testing-library/react";
 import React from "react";
 import App from "./App";
@@ -13,8 +15,7 @@ const selectedDirection = { direction_id: 0, direction_name: "Eastbound" };
 
 test("render the page title", () => {
   const { getByText } = render(<App />);
-  const titleElement = getByText(/NexTrip/i);
-  expect(titleElement).toBeInTheDocument();
+  expect(getByText("NexTrip")).toBeInTheDocument();
 });
 
 test("render the main page select", () => {

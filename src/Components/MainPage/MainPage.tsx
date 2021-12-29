@@ -7,6 +7,13 @@ import {
 } from "../../Interfaces/Interfaces";
 import Stops from "../Stops/Stops";
 import "./MainPage.css";
+import {
+  withRouter,
+  useHistory,
+  Router,
+  Route,
+  useRouteMatch,
+} from "react-router-dom";
 
 const MainPage: React.FC = () => {
   const [routes, setRoutes] = useState([] as MetroRoute[]);
@@ -21,6 +28,7 @@ const MainPage: React.FC = () => {
     React.useState<boolean>(true);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError]: [string, (error: string) => void] = useState("");
+  let match = useRouteMatch();
 
   const cancelToken = axios.CancelToken; //create cancel token
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,6 +37,7 @@ const MainPage: React.FC = () => {
     (cancelTokenSource: CancelTokenSource) => void
   ] = React.useState(cancelToken.source());
 
+  // const history = useHistory();
   const handleCancelClick = () => {
     if (cancelTokenSource) {
       cancelTokenSource.cancel("User cancelled operation");
@@ -49,6 +58,7 @@ const MainPage: React.FC = () => {
       direction_name: directions.options[directions.selectedIndex].text,
     });
   };
+  const path = `${selectedRoute?.route_id}/${selectedDirection?.direction_id}`;
 
   const catchErr = (err: any) => {
     console.log(err);
@@ -99,6 +109,7 @@ const MainPage: React.FC = () => {
         });
     }
   }, [selectedRoute]);
+  const history = useHistory();
 
   //Gets stops
   useEffect(() => {
@@ -109,7 +120,8 @@ const MainPage: React.FC = () => {
           `https://svc.metrotransit.org/nextripv2/stops/${path}`
         )
         .then((response) => {
-          // navigate(`/${path}`);
+          history.push(`${match.url}${path}`);
+          console.log(match);
           setStops(response.data);
         })
         .catch((err) => {
@@ -158,8 +170,6 @@ const MainPage: React.FC = () => {
                   data-testid={`direction-${direction.direction_id}`}
                   key={direction.direction_id}
                   value={direction.direction_id}
-                  //   onClick={() => navigate(`/${path}`)
-                  // }
                 >
                   {direction.direction_name}
                 </option>
@@ -167,8 +177,11 @@ const MainPage: React.FC = () => {
             </select>
           )}
         </div>
+
         {selectedDirection && (
-          <Stops stops={stops} selectedDirection={selectedDirection} />
+          <Route path={`${match.url}${path}`}>
+            <Stops stops={stops} selectedDirection={selectedDirection} />
+          </Route>
         )}
       </div>
     </div>
