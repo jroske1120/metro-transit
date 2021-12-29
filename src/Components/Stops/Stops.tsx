@@ -1,6 +1,5 @@
 import { RouteDirection, StopsList } from "../../Interfaces/Interfaces";
 import "./Stops.css";
-import { useHistory, useRouteMatch, withRouter } from "react-router-dom";
 
 type Props = {
   stops?: StopsList[];
@@ -8,12 +7,6 @@ type Props = {
 };
 
 const Stops: React.FC<Props> = ({ stops, selectedDirection }) => {
-  console.log('here');
-  console.log(stops);
-  let match = useRouteMatch();
-  console.log(match);
-
-const history = useHistory();
   return (
     <div data-testid="stops-list" className="stops-container">
       {stops ? (

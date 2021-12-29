@@ -1,19 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios, { CancelTokenSource } from "axios";
 import React, { useEffect, useState } from "react";
+import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import {
   MetroRoute,
   RouteDirection,
-  StopsList,
+  StopsList
 } from "../../Interfaces/Interfaces";
 import Stops from "../Stops/Stops";
 import "./MainPage.css";
-import {
-  withRouter,
-  useHistory,
-  Router,
-  Route,
-  useRouteMatch,
-} from "react-router-dom";
 
 const MainPage: React.FC = () => {
   const [routes, setRoutes] = useState([] as MetroRoute[]);
@@ -28,7 +23,6 @@ const MainPage: React.FC = () => {
     React.useState<boolean>(true);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError]: [string, (error: string) => void] = useState("");
-  let match = useRouteMatch();
 
   const cancelToken = axios.CancelToken; //create cancel token
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -37,7 +31,10 @@ const MainPage: React.FC = () => {
     (cancelTokenSource: CancelTokenSource) => void
   ] = React.useState(cancelToken.source());
 
-  // const history = useHistory();
+  const history = useHistory();
+  const match = useRouteMatch();
+  const urlRoute = `${selectedRoute?.route_id}/${selectedDirection?.direction_id}`;
+
   const handleCancelClick = () => {
     if (cancelTokenSource) {
       cancelTokenSource.cancel("User cancelled operation");
@@ -58,7 +55,6 @@ const MainPage: React.FC = () => {
       direction_name: directions.options[directions.selectedIndex].text,
     });
   };
-  const path = `${selectedRoute?.route_id}/${selectedDirection?.direction_id}`;
 
   const catchErr = (err: any) => {
     console.log(err);
@@ -109,19 +105,16 @@ const MainPage: React.FC = () => {
         });
     }
   }, [selectedRoute]);
-  const history = useHistory();
 
   //Gets stops
   useEffect(() => {
     if (selectedDirection) {
-      const path = `${selectedRoute?.route_id}/${selectedDirection?.direction_id}`;
       axios
         .get<StopsList[]>(
-          `https://svc.metrotransit.org/nextripv2/stops/${path}`
+          `https://svc.metrotransit.org/nextripv2/stops/${urlRoute}`
         )
         .then((response) => {
-          history.push(`${match.url}${path}`);
-          console.log(match);
+          history.push(`${match.url}${urlRoute}`);
           setStops(response.data);
         })
         .catch((err) => {
@@ -179,7 +172,7 @@ const MainPage: React.FC = () => {
         </div>
 
         {selectedDirection && (
-          <Route path={`${match.url}${path}`}>
+          <Route path={`${match.url}${urlRoute}`}>
             <Stops stops={stops} selectedDirection={selectedDirection} />
           </Route>
         )}

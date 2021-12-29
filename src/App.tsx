@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  HashRouter as Router,
-  Route,
-  Redirect,
-  Switch,
-} from 'react-router-dom';import { Wrapper } from "./App.styles";
+import { HashRouter as Router, Route } from "react-router-dom";
+import { Wrapper } from "./App.styles";
 import "./App.styles.ts";
 import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Header";
@@ -14,16 +10,15 @@ import Stops from "./Components/Stops/Stops";
 function App() {
   return (
     <Router>
-    <Wrapper>
-      <Header />
+      <Wrapper>
+        <Header />
         <Router>
-          <Route  path="/" component={MainPage} />
+          <Route path="/" component={MainPage} />
           <Route path=":id" component={Stops} />
         </Router>
-      <Footer />
-    </Wrapper>
+        <Footer />
+      </Wrapper>
     </Router>
-
   );
 }
 

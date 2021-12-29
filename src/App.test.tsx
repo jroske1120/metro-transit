@@ -1,7 +1,10 @@
 /* eslint-disable testing-library/no-node-access */
 /* eslint-disable testing-library/prefer-screen-queries */
-import { render } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { render, screen } from "@testing-library/react";
+import { createMemoryHistory } from "history";
 import React from "react";
+import { Router } from "react-router-dom";
 import App from "./App";
 import MainPage from "./Components/MainPage/MainPage";
 import Stops from "./Components/Stops/Stops";
@@ -19,9 +22,13 @@ test("render the page title", () => {
 });
 
 test("render the main page select", () => {
-  const { getByText } = render(<MainPage />);
-  const titleElement = getByText(/Select a Route/i);
-  expect(titleElement).toBeInTheDocument();
+  const history = createMemoryHistory();
+  render(
+    <Router history={history}>
+      <MainPage />
+    </Router>
+  );
+  expect(screen.getByText(/Select a route/i)).toBeInTheDocument();
 });
 
 test(`has rendered a the items passed correctly`, () => {
