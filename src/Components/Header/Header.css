@@ -13,7 +13,7 @@
   height: 10rem;
   position: relative;
 }
-.banner button {
+.banner h1 {
   position: absolute;
   background-color: #fff;
   color: #8a8b8a;
@@ -21,29 +21,9 @@
   margin-bottom: 0;
   padding: 1rem;
   width: auto;
-  font-size: 2rem;
-  font-weight: 900;
+  font-size: 2rem !important;
   left: 20px;
   bottom: 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.banner button p:nth-child(1) {
-  display: block;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-}
-
-.banner button p:nth-child(2) {
-  display: block;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-  font-size: small;
-  padding: 0rem;
-  width: auto;
-  left: 20px;
-  bottom: 0px;
 }
 
 @media screen and (min-width: 992px) {

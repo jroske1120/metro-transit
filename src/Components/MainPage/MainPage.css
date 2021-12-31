@@ -27,6 +27,7 @@
   border-radius: 5px;
 }
 
+/* Allows select boxes to fade in smoothly */
 @keyframes FadeIn {
   0% {
     opacity: 0;
@@ -36,6 +37,7 @@
   }
 }
 
+/* Responsiveness to other screen sizes */
 @media screen and (max-width: 768px) {
   .main-page {
     font-size: 23px;
